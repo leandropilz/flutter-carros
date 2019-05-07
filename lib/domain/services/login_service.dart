@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:carros/domain/services/response.dart';
+import 'package:carros/domain/response.dart';
 import 'package:http/http.dart' as http;
 
 class LoginService {
