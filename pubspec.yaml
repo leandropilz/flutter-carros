@@ -30,6 +30,7 @@ dev_dependencies:
     sdk: flutter
 
   shared_preferences: ^0.5.2
+  sqflite: ^1.1.5
 
 # For information on the generic Dart part of this file, see the
 # following page: https://www.dartlang.org/tools/pub/pubspec

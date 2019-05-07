@@ -1,58 +1,15 @@
 import 'package:carros/domain/carro.dart';
-import 'package:carros/domain/services/carro_service.dart';
 import 'package:carros/pages/carro_page.dart';
 import 'package:carros/utils/nav.dart';
 import 'package:flutter/material.dart';
 
-class CarrosListView extends StatefulWidget {
-  final String tipo;
+class CarrosListView extends StatelessWidget {
+  final List<Carro> carros;
 
-  const CarrosListView(this.tipo);
+  const CarrosListView(this.carros);
 
-  @override
-  _CarrosListViewState createState() => _CarrosListViewState();
-}
-
-class _CarrosListViewState extends State<CarrosListView>
-    with AutomaticKeepAliveClientMixin<CarrosListView> {
   @override
   Widget build(BuildContext context) {
-    return _body();
-  }
-
-  @override
-  bool get wantKeepAlive => true;
-
-  _body() {
-    Future future = CarroService.getCarros(widget.tipo);
-    return Container(
-      padding: EdgeInsets.all(8),
-      //FutureBuilder, banco de dados, web sevice e constroi uma widget com base em um future.
-      child: FutureBuilder(
-        future: future,
-        builder: (context, snapshot) {
-          if (snapshot.hasError) {
-            return Center(
-              child: Text(
-                "Nenhum carro disponível.",
-                style: TextStyle(
-                  fontSize: 24,
-                  color: Colors.grey,
-                ),
-              ), //Text
-            ); //Center
-          } else if (!snapshot.hasData) {
-            return Center(
-              child: CircularProgressIndicator(),
-            ); //Center
-          }
-          return _listView(snapshot.data); //ListView
-        },
-      ), //FutureBuilder
-    ); //Container
-  }
-
-  _listView(List<Carro> carros) {
     return ListView.builder(
       itemCount: carros.length,
       itemBuilder: (ctx, idx) {
@@ -236,8 +193,8 @@ class _CarrosListViewState extends State<CarrosListView>
       }, //itemBuilder
     ); //ListView.builder
   }
+}
 
-  void _onClickCarro(BuildContext context, Carro carro) {
-    push(context, CarroPage(carro: carro));
-  }
+void _onClickCarro(BuildContext context, Carro carro) {
+  push(context, CarroPage(carro: carro));
 }

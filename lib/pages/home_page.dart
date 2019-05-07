@@ -1,8 +1,9 @@
 import 'package:carros/domain/tipo_carro.dart';
 import 'package:carros/utils/prefs.dart';
 import 'package:carros/widgets/carros_listview.dart';
+import 'package:carros/widgets/carros_page.dart';
+import 'package:carros/widgets/favoritos_page.dart';
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -21,7 +22,7 @@ class _HomePageState extends State<HomePage>
       tabController.index = idx;
     });
 
-    tabController = TabController(length: 3, vsync: this);
+    tabController = TabController(length: 4, vsync: this);
     tabController.addListener(() async {
       Prefs.setInt("tab", tabController.index);
     });
@@ -47,15 +48,20 @@ class _HomePageState extends State<HomePage>
               text: "Luxuosos",
               icon: Icon(Icons.directions_car),
             ), //Tab
+            Tab(
+              text: "Favoritos",
+              icon: Icon(Icons.favorite),
+            ), //Tab
           ], //tabs
         ), //TabBar
       ), //AppBar
       body: TabBarView(
         controller: tabController,
         children: <Widget>[
-          CarrosListView(TipoCarro.classicos), //CarrosListView
-          CarrosListView(TipoCarro.esportivos), //CarrosListView
-          CarrosListView(TipoCarro.luxo), //CarrosListView
+          CarrosPage(TipoCarro.classicos), //CarrosPage
+          CarrosPage(TipoCarro.esportivos), //CarrosPage
+          CarrosPage(TipoCarro.luxo), //CarrosPage
+          FavoritosPage(), //FavoritosPage
         ], //<Widget>
       ), //TabBarView
     ); //Scaffold

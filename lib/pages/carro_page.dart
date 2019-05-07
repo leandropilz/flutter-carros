@@ -1,3 +1,4 @@
+import 'package:carros/db.dart';
 import 'package:carros/domain/carro.dart';
 import 'package:carros/domain/services/carro_service.dart';
 import 'package:flutter/material.dart';
@@ -13,6 +14,18 @@ class CarroPage extends StatefulWidget {
 
 class _CarroPageState extends State<CarroPage> {
   get carro => widget.carro;
+
+  bool _isSaved = false;
+
+  @override
+  void initState() {
+    super.initState();
+    DB().exists(carro).then((isSaved) {
+      setState(() {
+        _isSaved = isSaved;
+      });
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -60,10 +73,12 @@ class _CarroPageState extends State<CarroPage> {
           ), //Column
         ), //Expanded
         InkWell(
-          onTap: () {},
+          onTap: () {
+            _onClickFavorito(context, carro);
+          },
           child: Icon(
             Icons.favorite,
-            color: Colors.red,
+            color: _isSaved ? Colors.red : Colors.grey,
             size: 36,
           ), //Icon
         ), //InkWell
@@ -107,5 +122,22 @@ class _CarroPageState extends State<CarroPage> {
         ], //<Widget>[]
       ), //Column
     ); //Container
+  }
+
+  void _onClickFavorito(BuildContext context, carro) async {
+    final db = DB.getInstance();
+
+    final exists = await db.exists(carro);
+
+    if (exists) {
+      db.deleteCarro(carro.id);
+    } else {
+      int id = await db.saveCarro(carro);
+      print("Carro salvo $id");
+    }
+
+    setState(() {
+      _isSaved = !exists;
+    });
   }
 }
