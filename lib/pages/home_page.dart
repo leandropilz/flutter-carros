@@ -1,6 +1,8 @@
 import 'package:carros/domain/tipo_carro.dart';
+import 'package:carros/utils/prefs.dart';
 import 'package:carros/widgets/carros_listview.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -14,9 +16,14 @@ class _HomePageState extends State<HomePage>
   @override
   void initState() {
     super.initState();
+
+    Prefs.getInt("tab").then((idx) {
+      tabController.index = idx;
+    });
+
     tabController = TabController(length: 3, vsync: this);
-    tabController.addListener(() {
-      int idx = tabController.index;
+    tabController.addListener(() async {
+      Prefs.setInt("tab", tabController.index);
     });
   }
 
