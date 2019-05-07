@@ -1,11 +1,20 @@
+import 'package:carros/domain/services/login_service.dart';
+import 'package:carros/utils/alerts.dart';
 import 'package:flutter/material.dart';
 
-class LoginPage extends StatelessWidget {
+class LoginPage extends StatefulWidget {
+  @override
+  _LoginPageState createState() => _LoginPageState();
+}
+
+class _LoginPageState extends State<LoginPage> {
   final _tLoginController =
       TextEditingController(text: "leandro.pilzz@gmail.com");
   final _tPasswController = TextEditingController(text: "12345678");
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+
+  var _progress = false;
 
   @override
   Widget build(BuildContext context) {
@@ -45,11 +54,11 @@ class LoginPage extends StatelessWidget {
             controller: _tLoginController,
             validator: _validatorLogin,
             keyboardType: TextInputType.emailAddress,
-            style: TextStyle(color: Colors.black, fontSize: 16),
+            style: TextStyle(color: Colors.black, fontSize: 20),
 //            textCapitalization: TextCapitalization.characters,
             decoration: InputDecoration(
               labelText: "Login",
-              labelStyle: TextStyle(color: Colors.black87, fontSize: 14),
+              labelStyle: TextStyle(color: Colors.black87, fontSize: 16),
               hintText: "Digite o seu login.",
               hintStyle: TextStyle(color: Colors.black87),
               border: OutlineInputBorder(
@@ -65,11 +74,11 @@ class LoginPage extends StatelessWidget {
               validator: _validatorPasswd,
               obscureText: true,
               keyboardType: TextInputType.number,
-              style: TextStyle(color: Colors.black, fontSize: 16),
+              style: TextStyle(color: Colors.black, fontSize: 20),
               textCapitalization: TextCapitalization.characters,
               decoration: InputDecoration(
                 labelText: "Senha",
-                labelStyle: TextStyle(color: Colors.black87, fontSize: 14),
+                labelStyle: TextStyle(color: Colors.black87, fontSize: 16),
                 hintText: "Digite o sua senha.",
                 hintStyle: TextStyle(color: Colors.black54),
                 border: OutlineInputBorder(
@@ -87,13 +96,17 @@ class LoginPage extends StatelessWidget {
                 _onClickLogin(context);
               },
               color: Colors.blue,
-              child: Text(
-                "Entrar",
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 24,
-                ), //TextStyle
-              ), //Text
+              child: _progress
+                  ? CircularProgressIndicator(
+                      valueColor: AlwaysStoppedAnimation(Colors.white),
+                    ) //CircularProgressIndicator
+                  : Text(
+                      "Entrar",
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 24,
+                      ), //TextStyle
+                    ), //Text
             ), //RaisedButton
           ) //Container
         ], //<Widget>
@@ -101,7 +114,7 @@ class LoginPage extends StatelessWidget {
     ); //Form
   }
 
-  _onClickLogin(BuildContext context) {
+  _onClickLogin(BuildContext context) async {
     final login = _tLoginController;
     final passw = _tPasswController;
 
@@ -109,6 +122,20 @@ class LoginPage extends StatelessWidget {
       return;
     }
 
-    print("Login ${login.text}, senha ${passw.text}");
+    setState(() {
+      _progress = true;
+    });
+
+    final response = await LoginService.login(login.text, passw.text);
+
+    setState(() {
+      _progress = false;
+    });
+
+    if (response.isOk()) {
+      print("Entrar na home.");
+    } else {
+      alert(context, "Erro", response.msg);
+    }
   }
 }
