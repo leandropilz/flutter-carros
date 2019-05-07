@@ -1,5 +1,7 @@
 import 'package:carros/domain/carro.dart';
 import 'package:carros/domain/services/carro_service.dart';
+import 'package:carros/pages/carro_page.dart';
+import 'package:carros/utils/nav.dart';
 import 'package:flutter/material.dart';
 
 class CarrosListView extends StatefulWidget {
@@ -56,56 +58,61 @@ class _CarrosListViewState extends State<CarrosListView>
       itemBuilder: (ctx, idx) {
         final c = carros[idx];
         return Container(
-          child: Card(
-            child: Padding(
-              padding: const EdgeInsets.only(left: 16),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  Center(
-                    child: Image.network(
-                      c.urlFoto,
-                    ),
-                  ), //Image
-                  Text(
-                    c.nome,
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                    style: TextStyle(
-                      color: Colors.black,
-                      fontSize: 24,
-                    ), //TextStyle
-                  ), // Text
-                  Text(
-                    c.desc,
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                    style: TextStyle(
-                      color: Colors.grey,
-                      fontSize: 16,
-                    ), //TextStyle
-                  ), // Text
-                  ButtonTheme.bar(
-                    child: ButtonBar(
-                      children: <Widget>[
-                        FlatButton(
-                          child: const Text('DETALHES'),
-                          onPressed: () {
-                            /* ... */
-                          },
-                        ), //FlatButton
-                        FlatButton(
-                          child: const Text('SHARE'),
-                          onPressed: () {
-                            /* ... */
-                          },
-                        ), //FlatButton
-                      ], //<Widget>
-                    ), //ButtonBar
-                  ), //ButtonTheme.bar
-                ], //<Widget>
-              ),
-            ), //Column
+          child: InkWell(
+            onTap: () {
+              _onClickCarro(context, c);
+            },
+            child: Card(
+              child: Padding(
+                padding: const EdgeInsets.only(left: 16),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Center(
+                      child: Image.network(
+                        c.urlFoto,
+                      ),
+                    ), //Image
+                    Text(
+                      c.nome,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontSize: 24,
+                      ), //TextStyle
+                    ), // Text
+                    Text(
+                      c.desc,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: TextStyle(
+                        color: Colors.grey,
+                        fontSize: 16,
+                      ), //TextStyle
+                    ), // Text
+                    ButtonTheme.bar(
+                      child: ButtonBar(
+                        children: <Widget>[
+                          FlatButton(
+                            child: const Text('DETALHES'),
+                            onPressed: () {
+                              _onClickCarro(context, c);
+                            },
+                          ), //FlatButton
+                          FlatButton(
+                            child: const Text('SHARE'),
+                            onPressed: () {
+                              /* ... */
+                            },
+                          ), //FlatButton
+                        ], //<Widget>
+                      ), //ButtonBar
+                    ), //ButtonTheme.bar
+                  ], //<Widget>
+                ),
+              ), //Column
+            ),
           ), //Card
         ); //Container
 
@@ -228,5 +235,9 @@ class _CarrosListViewState extends State<CarrosListView>
 //        ); //Container
       }, //itemBuilder
     ); //ListView.builder
+  }
+
+  void _onClickCarro(BuildContext context, Carro carro) {
+    push(context, CarroPage(carro: carro));
   }
 }

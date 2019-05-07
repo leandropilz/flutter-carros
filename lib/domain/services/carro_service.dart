@@ -10,4 +10,13 @@ class CarroService {
     final mapCarros = json.decode(response.body).cast<Map<String, dynamic>>();
     return mapCarros.map<Carro>((json) => Carro.fromJson(json)).toList();
   }
+
+  static Future<String> getLoremIpsum() async {
+    final url = "https://loripsum.net/api";
+    final response = await http.get(url);
+    var body = response.body;
+    body =  body.replaceAll("<p>", "");
+    body =  body.replaceAll("</p>", "");
+    return body;
+  }
 }
