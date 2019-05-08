@@ -1,6 +1,8 @@
 import 'package:carros/db.dart';
 import 'package:carros/domain/carro.dart';
 import 'package:carros/domain/services/carro_service.dart';
+import 'package:carros/pages/carro-form-page.dart';
+import 'package:carros/utils/nav.dart';
 import 'package:flutter/material.dart';
 
 class CarroPage extends StatefulWidget {
@@ -32,6 +34,31 @@ class _CarroPageState extends State<CarroPage> {
     return Scaffold(
       appBar: AppBar(
         title: Text(carro.nome),
+        actions: <Widget>[
+          IconButton(icon: Icon(Icons.place), onPressed: () {}), //IconButton
+          IconButton(icon: Icon(Icons.videocam), onPressed: () {}), //IconButton
+          PopupMenuButton<String>(
+            onSelected: (value) {
+              _onClickPopupMenu(value);
+            }, //onSelected
+            itemBuilder: (context) {
+              return [
+                PopupMenuItem(
+                  value: "Editar",
+                  child: Text("Editar"),
+                ), //PopupMenuItem
+                PopupMenuItem(
+                  value: "Excluir",
+                  child: Text("Excluir"),
+                ), //PopupMenuItem
+                PopupMenuItem(
+                  value: "Compartilhar",
+                  child: Text("Compartilhar"),
+                ), //PopupMenuItem
+              ]; //return []
+            }, //itemBuilder
+          ), //PopupMenuButton
+        ], //<Widget>
       ), //AppBar
       body: _body(), //body
     ); //Scaffold
@@ -139,5 +166,11 @@ class _CarroPageState extends State<CarroPage> {
     setState(() {
       _isSaved = !exists;
     });
+  }
+
+  void _onClickPopupMenu(String value) {
+    if (value == "Editar") {
+      push(context, CarroFormPage(carro: carro));
+    }
   }
 }

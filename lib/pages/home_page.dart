@@ -1,6 +1,7 @@
 import 'package:carros/domain/tipo_carro.dart';
+import 'package:carros/pages/carro-form-page.dart';
+import 'package:carros/utils/nav.dart';
 import 'package:carros/utils/prefs.dart';
-import 'package:carros/widgets/carros_listview.dart';
 import 'package:carros/widgets/carros_page.dart';
 import 'package:carros/widgets/favoritos_page.dart';
 import 'package:flutter/material.dart';
@@ -64,6 +65,12 @@ class _HomePageState extends State<HomePage>
           FavoritosPage(), //FavoritosPage
         ], //<Widget>
       ), //TabBarView
+      floatingActionButton: FloatingActionButton(
+        child: Icon(Icons.add),
+        onPressed: () {
+          push(context, CarroFormPage());
+        },
+      ), //FloatingActionButton
     ); //Scaffold
   }
 }
