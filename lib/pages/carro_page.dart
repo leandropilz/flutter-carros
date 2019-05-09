@@ -2,6 +2,7 @@ import 'package:carros/db.dart';
 import 'package:carros/domain/carro.dart';
 import 'package:carros/domain/services/carro_service.dart';
 import 'package:carros/pages/carro-form-page.dart';
+import 'package:carros/utils/alerts.dart';
 import 'package:carros/utils/nav.dart';
 import 'package:flutter/material.dart';
 
@@ -68,7 +69,11 @@ class _CarroPageState extends State<CarroPage> {
     return ListView(
       padding: EdgeInsets.all(16),
       children: <Widget>[
-        Image.network(carro.urlFoto),
+        carro.urlFoto != null
+            ? Image.network(
+                carro.urlFoto,
+              )
+            : Image.asset("assets/images/camera.png"),
         _bloco1(), //bloco1
         _bloco2(), //bloco2
       ], //<Widget>
@@ -171,6 +176,17 @@ class _CarroPageState extends State<CarroPage> {
   void _onClickPopupMenu(String value) {
     if (value == "Editar") {
       push(context, CarroFormPage(carro: carro));
+    } else if (value == "Excluir") {
+      _deletar();
+    }
+  }
+
+  void _deletar() async {
+    final response = await CarroService.excluir(carro.id);
+    if (response.isOk()) {
+      pop(context);
+    } else {
+      alert(context, "Erro", response.msg);
     }
   }
 }

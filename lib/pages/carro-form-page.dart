@@ -1,4 +1,6 @@
 import 'package:carros/domain/carro.dart';
+import 'package:carros/domain/services/carro_service.dart';
+import 'package:carros/utils/alerts.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -133,7 +135,7 @@ class _CarroFormPageState extends State<CarroFormPage> {
   }
 
   _headerFoto() {
-    return carro != null
+    return carro != null && carro.urlFoto != null
         ? Image.network(carro.urlFoto)
         : Image.asset(
             "assets/images/camera.png",
@@ -206,10 +208,14 @@ class _CarroFormPageState extends State<CarroFormPage> {
     }
   }
 
-  _onClickSalvar(BuildContext context) {
+  _onClickSalvar(BuildContext context) async {
     if (!_formKey.currentState.validate()) {
       return;
     }
+
+    setState(() {
+      _showProgress = true;
+    });
 
     // Cria o carro
     var c = carro ?? Carro();
@@ -217,10 +223,16 @@ class _CarroFormPageState extends State<CarroFormPage> {
     c.desc = tDesc.text;
     c.tipo = _getTipo();
 
+    final response = await CarroService.salvar(c);
+
     setState(() {
-      _showProgress = true;
+      _showProgress = false;
     });
 
-    print("Salvar o carro $c");
+    if (response.isOk()) {
+      alert(context, "Carro salvo", response.msg);
+    } else {
+      alert(context, "Erro", response.msg);
+    }
   }
 }

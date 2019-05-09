@@ -11,3 +11,7 @@ pushReplacement(BuildContext context, Widget page) {
     return page;
   }));
 }
+
+pop(BuildContext context) {
+  Navigator.pop(context);
+}

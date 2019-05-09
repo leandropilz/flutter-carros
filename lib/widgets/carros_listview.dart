@@ -26,9 +26,11 @@ class CarrosListView extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
                     Center(
-                      child: Image.network(
-                        c.urlFoto,
-                      ),
+                      child: c.urlFoto != null && c.urlFoto.isNotEmpty
+                          ? Image.network(
+                              c.urlFoto,
+                            )
+                          : Image.asset("assets/images/camera.png"),
                     ), //Image
                     Text(
                       c.nome,
