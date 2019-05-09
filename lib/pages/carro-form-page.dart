@@ -1,8 +1,11 @@
+import 'dart:io';
+
 import 'package:carros/domain/carro.dart';
 import 'package:carros/domain/services/carro_service.dart';
 import 'package:carros/utils/alerts.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 
 class CarroFormPage extends StatefulWidget {
   final Carro carro;
@@ -23,6 +26,8 @@ class _CarroFormPageState extends State<CarroFormPage> {
   int _radioIndex = 0;
 
   var _showProgress = false;
+
+  File fileCamera;
 
   get carro => widget.carro;
 
@@ -135,12 +140,25 @@ class _CarroFormPageState extends State<CarroFormPage> {
   }
 
   _headerFoto() {
-    return carro != null && carro.urlFoto != null
-        ? Image.network(carro.urlFoto)
-        : Image.asset(
-            "assets/images/camera.png",
-            height: 150,
-          );
+    return InkWell(
+      child: fileCamera != null
+          ? Image.file(
+              fileCamera,
+              height: 150,
+            ) //Image.file
+          : carro != null && carro.urlFoto != null
+              ? Image.network(carro.urlFoto)
+              : Image.asset(
+                  "assets/images/camera.png",
+                  height: 150,
+                ), //Image
+      onTap: _onClickFoto,
+    ); //InkWell
+  }
+
+  _onClickFoto() async {
+    fileCamera = await ImagePicker.pickImage(source: ImageSource.camera);
+    setState(() {});
   }
 
   _radioTipo() {
@@ -223,7 +241,7 @@ class _CarroFormPageState extends State<CarroFormPage> {
     c.desc = tDesc.text;
     c.tipo = _getTipo();
 
-    final response = await CarroService.salvar(c);
+    final response = await CarroService.salvar(c, fileCamera);
 
     setState(() {
       _showProgress = false;

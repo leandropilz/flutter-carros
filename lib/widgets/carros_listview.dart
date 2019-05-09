@@ -33,6 +33,7 @@ class CarrosListView extends StatelessWidget {
                       child: c.urlFoto != null && c.urlFoto.isNotEmpty
                           ? Image.network(
                               c.urlFoto,
+                              height: 150,
                             )
                           : Image.asset("assets/images/camera.png"),
                     ), //Image
