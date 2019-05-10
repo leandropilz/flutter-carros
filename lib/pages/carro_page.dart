@@ -2,9 +2,11 @@ import 'package:carros/db.dart';
 import 'package:carros/domain/carro.dart';
 import 'package:carros/domain/services/carro_service.dart';
 import 'package:carros/pages/carro-form-page.dart';
+import 'package:carros/pages/video_page.dart';
 import 'package:carros/utils/alerts.dart';
 import 'package:carros/utils/nav.dart';
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class CarroPage extends StatefulWidget {
   final Carro carro;
@@ -39,7 +41,11 @@ class _CarroPageState extends State<CarroPage> {
         title: Text(carro.nome),
         actions: <Widget>[
           IconButton(icon: Icon(Icons.place), onPressed: () {}), //IconButton
-          IconButton(icon: Icon(Icons.videocam), onPressed: () {}), //IconButton
+          IconButton(
+              icon: Icon(Icons.videocam),
+              onPressed: () {
+                _onClickVideo(context);
+              }), //IconButton
           PopupMenuButton<String>(
             onSelected: (value) {
               _onClickPopupMenu(value);
@@ -189,6 +195,19 @@ class _CarroPageState extends State<CarroPage> {
       pop(context);
     } else {
       alert(context, "Erro", response.msg);
+    }
+  }
+
+  void _onClickVideo(BuildContext context) {
+    if (carro.urlVideo != null && carro.urlVideo.isNotEmpty) {
+      //launch(carro.urlVideo);  //Abre o vídeo no browser nativo do device.
+      push(context, VideoPage(carro));
+    } else {
+      alert(
+        context,
+        "Erro",
+        "Este carro não possui nenhum vídeo",
+      );
     }
   }
 }
