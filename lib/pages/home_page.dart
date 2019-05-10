@@ -6,6 +6,8 @@ import 'package:carros/widgets/carros_page.dart';
 import 'package:carros/widgets/favoritos_page.dart';
 import 'package:flutter/material.dart';
 
+import '../drawer-list.dart';
+
 class HomePage extends StatefulWidget {
   @override
   _HomePageState createState() => _HomePageState();
@@ -71,6 +73,7 @@ class _HomePageState extends State<HomePage>
           push(context, CarroFormPage());
         },
       ), //FloatingActionButton
+      drawer: DrawerList(), //Drawer
     ); //Scaffold
   }
 }
