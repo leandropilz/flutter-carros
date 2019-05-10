@@ -1,3 +1,5 @@
+import 'package:google_maps_flutter/google_maps_flutter.dart';
+
 class Carro {
   final int id;
   String tipo;
@@ -43,6 +45,12 @@ class Carro {
       map["id"] = id;
     }
     return map;
+  }
+
+  latlng() {
+    return LatLng(
+        latitude == null || latitude.isEmpty ? 0.0 : double.parse(latitude),
+        longitude == null || longitude.isEmpty ? 0.0 : double.parse(longitude));
   }
 
   @override

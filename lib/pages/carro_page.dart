@@ -8,6 +8,8 @@ import 'package:carros/utils/nav.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import 'mapa_page.dart';
+
 class CarroPage extends StatefulWidget {
   final Carro carro;
 
@@ -40,7 +42,9 @@ class _CarroPageState extends State<CarroPage> {
       appBar: AppBar(
         title: Text(carro.nome),
         actions: <Widget>[
-          IconButton(icon: Icon(Icons.place), onPressed: () {}), //IconButton
+          IconButton(icon: Icon(Icons.place), onPressed: () {
+            _onClickMapa(context);
+          }), //IconButton
           IconButton(
               icon: Icon(Icons.videocam),
               onPressed: () {
@@ -207,6 +211,19 @@ class _CarroPageState extends State<CarroPage> {
         context,
         "Erro",
         "Este carro não possui nenhum vídeo",
+      );
+    }
+  }
+
+  void _onClickMapa(BuildContext context) {
+    if (carro.latitude != null && carro.longitude != null) {
+      //launch(carro.urlVideo);  //Abre o vídeo no browser nativo do device.
+      push(context, MapaPage(carro));
+    } else {
+      alert(
+        context,
+        "Erro",
+        "Este carro não possui nenhuma lat/lng.",
       );
     }
   }
