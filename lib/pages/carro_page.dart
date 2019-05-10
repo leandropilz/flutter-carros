@@ -24,9 +24,11 @@ class _CarroPageState extends State<CarroPage> {
   void initState() {
     super.initState();
     DB().exists(carro).then((isSaved) {
-      setState(() {
-        _isSaved = isSaved;
-      });
+      if (isSaved) {
+        setState(() {
+          _isSaved = isSaved;
+        });
+      }
     });
   }
 

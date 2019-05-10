@@ -1,16 +1,14 @@
 class Response {
-  final String status;
+  final bool status;
   final String msg;
-  final String url;
+  String url;
 
-  Response(this.status, this.msg, this.url);
+  Response(this.status, this.msg);
 
   Response.fromJson(Map<String, dynamic> map)
-      : status = map["status"],
+      : status = map["status"] == "OK",
         msg = map["msg"],
         url = map["url"];
 
-  bool isOk() {
-    return status == "OK";
-  }
+  bool isOk() => status;
 }
