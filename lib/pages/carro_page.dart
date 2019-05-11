@@ -6,7 +6,6 @@ import 'package:carros/pages/video_page.dart';
 import 'package:carros/utils/alerts.dart';
 import 'package:carros/utils/nav.dart';
 import 'package:flutter/material.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 import 'mapa_page.dart';
 

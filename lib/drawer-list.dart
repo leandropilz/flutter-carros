@@ -1,4 +1,5 @@
 import 'package:carros/pages/login_page.dart';
+import 'package:carros/pages/site_page.dart';
 import 'package:carros/utils/nav.dart';
 import 'package:flutter/material.dart';
 
@@ -63,7 +64,7 @@ class DrawerList extends StatelessWidget {
             ),
             ListTile(
               onTap: () {
-                print("Ajuda");
+                _onClickSite(context);
               },
               title: Text("Visite o site"),
               leading: Icon(Icons.web),
@@ -93,5 +94,10 @@ class DrawerList extends StatelessWidget {
     pop(context);
     pushReplacement(context, LoginPage());
     User.clear();
+  }
+
+  void _onClickSite(context) {
+    pop(context);
+    push(context, SitePage());
   }
 }

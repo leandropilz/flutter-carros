@@ -123,6 +123,20 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.6.0+3"
+  intl:
+    dependency: transitive
+    description:
+      name: intl
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.15.8"
+  local_auth:
+    dependency: "direct dev"
+    description:
+      name: local_auth
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.4.0+1"
   matcher:
     dependency: transitive
     description:
@@ -268,6 +282,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.10.0+8"
+  webview_flutter:
+    dependency: "direct dev"
+    description:
+      name: webview_flutter
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.3.6"
 sdks:
   dart: ">=2.2.0 <3.0.0"
   flutter: ">=1.2.1 <2.0.0"
