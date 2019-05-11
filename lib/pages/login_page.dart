@@ -1,8 +1,11 @@
 import 'package:carros/domain/services/login_service.dart';
+import 'package:carros/firebase/firebase-service.dart';
 import 'package:carros/pages/home_page.dart';
 import 'package:carros/utils/alerts.dart';
 import 'package:carros/utils/nav.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_auth_buttons/flutter_auth_buttons.dart';
+import 'package:firebase_remote_config/firebase_remote_config.dart';
 
 class LoginPage extends StatefulWidget {
   @override
@@ -17,6 +20,24 @@ class _LoginPageState extends State<LoginPage> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   var _progress = false;
+
+  @override
+  void initState() {
+    super.initState();
+
+    RemoteConfig.instance.then((remoteConfig) {
+      try {
+        remoteConfig
+            .setConfigSettings(new RemoteConfigSettings(debugMode: true));
+        remoteConfig.fetch(expiration: const Duration(minutes: 1));
+        remoteConfig.activateFetched();
+        final message = remoteConfig.getString("mensagem");
+        print('Mensagem: $message');
+      } catch (error) {
+        print('Remote config: $error');
+      }
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -110,7 +131,17 @@ class _LoginPageState extends State<LoginPage> {
                       ), //TextStyle
                     ), //Text
             ), //RaisedButton
-          ) //Container
+          ), //Container
+          Container(
+            height: 50,
+            margin: EdgeInsets.only(top: 20),
+            child: GoogleSignInButton(
+              text: "Login com Google",
+              onPressed: () {
+                _onClickLoginGoogle();
+              },
+            ), //GoogleSignInButton
+          ), //Container
         ], //<Widget>
       ), //ListView
     ); //Form
@@ -133,6 +164,17 @@ class _LoginPageState extends State<LoginPage> {
     setState(() {
       _progress = false;
     });
+
+    if (response.isOk()) {
+      pushReplacement(context, HomePage());
+    } else {
+      alert(context, "Erro", response.msg);
+    }
+  }
+
+  void _onClickLoginGoogle() async {
+    final service = FirebaseService();
+    final response = await service.loginGoogle();
 
     if (response.isOk()) {
       pushReplacement(context, HomePage());
