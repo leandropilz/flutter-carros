@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:carros/domain/services/login_service.dart';
 import 'package:carros/firebase/firebase-service.dart';
 import 'package:carros/pages/home_page.dart';
@@ -6,6 +8,7 @@ import 'package:carros/utils/nav.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_auth_buttons/flutter_auth_buttons.dart';
 import 'package:firebase_remote_config/firebase_remote_config.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 
 class LoginPage extends StatefulWidget {
   @override
@@ -19,12 +22,18 @@ class _LoginPageState extends State<LoginPage> {
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
+  final FirebaseMessaging _firebaseMessaging = FirebaseMessaging();
+
   var _progress = false;
 
   @override
   void initState() {
     super.initState();
+    _initRemoteConfig();
+    _initFcm();
+  }
 
+  void _initRemoteConfig() {
     RemoteConfig.instance.then((remoteConfig) {
       try {
         remoteConfig
@@ -37,6 +46,29 @@ class _LoginPageState extends State<LoginPage> {
         print('Remote config: $error');
       }
     });
+  }
+
+  void _initFcm() {
+    _firebaseMessaging.getToken().then((token) {
+      print("TOKEN [ $token ]");
+    });
+    _firebaseMessaging.configure(
+        onMessage: (Map<String, dynamic> message) async {
+      print("onMessage: $message");
+    }, onResume: (Map<String, dynamic> message) async {
+      print("\n\n\nonResume: $message");
+    }, onLaunch: (Map<String, dynamic> message) async {
+      print("\n\n\nonLaunch: $message");
+    });
+
+    if (Platform.isIOS) {
+      _firebaseMessaging.requestNotificationPermissions(
+          IosNotificationSettings(sound: true, badge: true, alert: true));
+      _firebaseMessaging.onIosSettingsRegistered
+          .listen((IosNotificationSettings settings) {
+        print("iOS Push Settings: [$settings]");
+      });
+    }
   }
 
   @override
